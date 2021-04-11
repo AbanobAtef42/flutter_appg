@@ -1,0 +1,103 @@
+// DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
+// This is a library that provides messages for a ar locale. All the
+// messages from the main program should be duplicated here with the same
+// function name.
+
+// Ignore issues from commonly used lints in this file.
+// ignore_for_file:unnecessary_brace_in_string_interps, unnecessary_new
+// ignore_for_file:prefer_single_quotes,comment_references, directives_ordering
+// ignore_for_file:annotate_overrides,prefer_generic_function_type_aliases
+// ignore_for_file:unused_import, file_names
+
+import 'package:intl/intl.dart';
+import 'package:intl/message_lookup_by_library.dart';
+
+final messages = new MessageLookup();
+
+typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
+
+class MessageLookup extends MessageLookupByLibrary {
+  String get localeName => 'ar';
+
+  final messages = _notInlinedMessages(_notInlinedMessages);
+  static _notInlinedMessages(_) => <String, Function> {
+    "PassUpdated" : MessageLookupByLibrary.simpleMessage("تم تعديل كلمة المرور بنجاح"),
+    "account" : MessageLookupByLibrary.simpleMessage("الحساب"),
+    "addedSuccessfully" : MessageLookupByLibrary.simpleMessage("تمت الإضافة بنجاح"),
+    "addedSuccessfullyToCart" : MessageLookupByLibrary.simpleMessage("تمت الإضافة إلي عربة التسوٌق بنجاح"),
+    "addingFailed" : MessageLookupByLibrary.simpleMessage("فشلت الإضافة"),
+    "address" : MessageLookupByLibrary.simpleMessage("العنوان"),
+    "amount" : MessageLookupByLibrary.simpleMessage("الإجمالي"),
+    "bestSeller" : MessageLookupByLibrary.simpleMessage("الأكثر مبيعاً"),
+    "cart" : MessageLookupByLibrary.simpleMessage("عربة التسوُق"),
+    "cartAdd" : MessageLookupByLibrary.simpleMessage("إضافة إلي عربة التسوق"),
+    "cash" : MessageLookupByLibrary.simpleMessage("كاش"),
+    "cats" : MessageLookupByLibrary.simpleMessage("الأقسام"),
+    "checkOut" : MessageLookupByLibrary.simpleMessage("إرسال الطلب"),
+    "checkOutBtn" : MessageLookupByLibrary.simpleMessage("شراء"),
+    "city" : MessageLookupByLibrary.simpleMessage("المدينة"),
+    "confirmPassword" : MessageLookupByLibrary.simpleMessage("تأكيد كلمة المرور"),
+    "continueShopping" : MessageLookupByLibrary.simpleMessage("الإستمرار في التسوٌق"),
+    "country" : MessageLookupByLibrary.simpleMessage("البلد"),
+    "delFCart" : MessageLookupByLibrary.simpleMessage("حذف من عربة التسوق"),
+    "diffPasses" : MessageLookupByLibrary.simpleMessage("فشل في إنشاء الحساب\nكلمتي المرور غير متطابقين"),
+    "dubEmail" : MessageLookupByLibrary.simpleMessage("فشل في إنشاء الحساب\nهذا البريد الإليكتروني مأخوذ بالفعل"),
+    "dubPhone" : MessageLookupByLibrary.simpleMessage("فشل في إنشاء الحساب\nرقم التليفون مأخوذ بالفعل"),
+    "editPass" : MessageLookupByLibrary.simpleMessage("تعديل كلمة المرور"),
+    "editProfile" : MessageLookupByLibrary.simpleMessage("تعديل البيانات"),
+    "email" : MessageLookupByLibrary.simpleMessage("البريد الإليكتروني"),
+    "emptyField" : MessageLookupByLibrary.simpleMessage("هذا الحقل مطلوب"),
+    "exit" : MessageLookupByLibrary.simpleMessage("خروج؟"),
+    "favs" : MessageLookupByLibrary.simpleMessage("المفضًلة"),
+    "fillIn" : MessageLookupByLibrary.simpleMessage("من فضلك إملأ الحقول المطلوبة"),
+    "governorate" : MessageLookupByLibrary.simpleMessage("المحافظة"),
+    "home" : MessageLookupByLibrary.simpleMessage("الرئيسية"),
+    "invEmail" : MessageLookupByLibrary.simpleMessage("بريد إليكتروني غير صالح"),
+    "item" : MessageLookupByLibrary.simpleMessage("المنتج"),
+    "lName" : MessageLookupByLibrary.simpleMessage("الإسم الأخير"),
+    "lang" : MessageLookupByLibrary.simpleMessage("اللغة"),
+    "login" : MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
+    "loginLabel" : MessageLookupByLibrary.simpleMessage("تسجيل الدخول بحسابك"),
+    "name" : MessageLookupByLibrary.simpleMessage("الإسم"),
+    "no" : MessageLookupByLibrary.simpleMessage("لا"),
+    "noInternet" : MessageLookupByLibrary.simpleMessage("لا يوجد إتصال بالإنترنت"),
+    "noProInWishList" : MessageLookupByLibrary.simpleMessage("لا توجد منتجات مفضًلة"),
+    "noProShoppingCart" : MessageLookupByLibrary.simpleMessage("لا توجد منتجات في عربة التسوٌق"),
+    "noResults" : MessageLookupByLibrary.simpleMessage("لا توجد نتائج"),
+    "notRegistered" : MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟"),
+    "ok" : MessageLookupByLibrary.simpleMessage("حسناً"),
+    "online" : MessageLookupByLibrary.simpleMessage("أونلاين"),
+    "orderDetails" : MessageLookupByLibrary.simpleMessage("تفاصيل الطلب"),
+    "orderFailed" : MessageLookupByLibrary.simpleMessage("فشل الطلب"),
+    "orderPlaced" : MessageLookupByLibrary.simpleMessage("تم إدراج طلبك في قائمة الطلبات"),
+    "orderedAt" : MessageLookupByLibrary.simpleMessage("تاريخ الطلب"),
+    "orderedSuccessfully" : MessageLookupByLibrary.simpleMessage("تم الطلب بنجاح"),
+    "orders" : MessageLookupByLibrary.simpleMessage("الطلبات"),
+    "password" : MessageLookupByLibrary.simpleMessage("كلمة المرور"),
+    "payment" : MessageLookupByLibrary.simpleMessage("طريقة الدفع"),
+    "perData" : MessageLookupByLibrary.simpleMessage("البيانات الشخصية"),
+    "phone" : MessageLookupByLibrary.simpleMessage("رقم التليفون"),
+    "productAddTCart" : MessageLookupByLibrary.simpleMessage("تمت إضافة المنتج إلي عربة التسوٌق"),
+    "productNAvail" : MessageLookupByLibrary.simpleMessage("هذا المنتج غير متوفر"),
+    "profileUpdated" : MessageLookupByLibrary.simpleMessage("تم تعديل البيانات بنجاح"),
+    "quantity" : MessageLookupByLibrary.simpleMessage("الكمية"),
+    "register" : MessageLookupByLibrary.simpleMessage("إنشاء"),
+    "registerLabel" : MessageLookupByLibrary.simpleMessage("إنشاء حسابك"),
+    "registered" : MessageLookupByLibrary.simpleMessage("تم إنشاء الحساب بنجاح"),
+    "search" : MessageLookupByLibrary.simpleMessage("بحث"),
+    "shipper" : MessageLookupByLibrary.simpleMessage("شركة الشحن"),
+    "shortPass" : MessageLookupByLibrary.simpleMessage("فشل في إنشاء الحساب\nكلمة المرور لابد ان تكون 7 رموز علي الأقل"),
+    "signOut" : MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
+    "signed" : MessageLookupByLibrary.simpleMessage("تم تسجيل الدخول بنجاح"),
+    "signupnow" : MessageLookupByLibrary.simpleMessage("سجّل الأن"),
+    "slowInternet" : MessageLookupByLibrary.simpleMessage("الإتصال بالإنترنت بطئ"),
+    "stShopDesc" : MessageLookupByLibrary.simpleMessage("إبدأ رحلة التسوق عن طريق \n متابعة جميع الماركات"),
+    "stShopping" : MessageLookupByLibrary.simpleMessage("إبدأ التسوُق"),
+    "swiToBrw" : MessageLookupByLibrary.simpleMessage("إسحب الصور للتصفح"),
+    "timeOut" : MessageLookupByLibrary.simpleMessage("حدث خطأ\nإنقطع الإتصال"),
+    "update" : MessageLookupByLibrary.simpleMessage("تعديل"),
+    "wish" : MessageLookupByLibrary.simpleMessage("المنتجات المفضلة"),
+    "wrongEmailOrPass" : MessageLookupByLibrary.simpleMessage("فشل في تسجيل الدخول\nخطأ في البرييد الإليكتروني أو كلمة المرور"),
+    "yes" : MessageLookupByLibrary.simpleMessage("نعم")
+  };
+}

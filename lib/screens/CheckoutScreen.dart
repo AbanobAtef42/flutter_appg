@@ -6,6 +6,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app8/generated/l10n.dart';
+import 'package:flutter_app8/icons/my_flutter_app_icons.dart';
 import 'package:flutter_app8/models/ModelProducts.dart';
 import 'package:flutter_app8/models/ModelsGoverns.dart';
 import 'package:flutter_app8/models/modelUser.dart';
@@ -525,7 +526,7 @@ key: cityKey,
           textColor: Colors.white,
           gravity: ToastGravity.BOTTOM);*/
       MyApplication.getDialogue(
-          context, S.of(context).noInternet, '', DialogType.ERROR);
+          context,S.of(context).orderRequestFailed, S.of(context).noInternet, DialogType.ERROR);
     }
   }
 
@@ -781,7 +782,7 @@ key: cityKey,
               child: FittedBox(
                   fit: BoxFit.contain,
                   child: Icon(
-                    Icons.wifi_off_rounded,
+                    MyFlutterApp.slow_internet,
                     color: colorPrimary,
                   )),
             ),

@@ -198,7 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
   _login(String eMail, String password) async {
 if(kIsWeb && !await MyApplication.checkConnection())
 {
-  MyApplication.getDialogue(context, S.of(context).noInternet, '', DialogType.ERROR);
+  MyApplication.getDialogue(context,S.of(context).loginFailed, S.of(context).noInternet, DialogType.ERROR);
 }
     FocusScopeNode currentFocus = FocusScope.of(context);
 
@@ -243,7 +243,7 @@ if(kIsWeb && !await MyApplication.checkConnection())
       //  MyApplication.getDialogue(context, S.of(context).signed, '', DialogType.SUCCES);
         User? user = provider.modelUser!.user;
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => BottomNavHost()));
+            context, MaterialPageRoute(builder: (context) => BottomNavHost('')));
         // MyApplication.showAlertDialog(context, signed, '', '');
       }
     } else {
@@ -273,7 +273,7 @@ if(kIsWeb && !await MyApplication.checkConnection())
           backgroundColor: colorPrimary,
           textColor: Colors.white,
           gravity: ToastGravity.BOTTOM);*/
-      MyApplication.getDialogue(context, S.of(context).noInternet, '', DialogType.ERROR);
+      MyApplication.getDialogue(context,S.of(context).loginFailed, S.of(context).noInternet, DialogType.ERROR);
     }
   }
 }

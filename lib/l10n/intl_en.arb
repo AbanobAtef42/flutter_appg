@@ -5,10 +5,10 @@
   "wrongEmailOrPass": "Login Failed\nWrong Email Or Password",
   "timeOut": "An Error Occured\nTime out",
   "slowInternet": "Slow Internet Connection",
-  "dubEmail": "Register Failed\nThe email has already been taken",
-  "shortPass": "Register Failed\nPassword must be at least 7 characters",
-  "dubPhone": "Register Failed\nThe phone has already been taken",
-  "diffPasses": "Register Failed\nThe password confirmation does not match",
+  "dubEmail": "The email has already been taken",
+  "shortPass": "Password must be at least 7 characters",
+  "dubPhone": "The phone has already been taken",
+  "diffPasses": "The password confirmation does not match",
   "invEmail": "Invalid Email",
   "password": "Password",
   "confirmPassword": "Confirm Password",
@@ -76,5 +76,11 @@
   "productAddTCart": "Product Has Been Added To Cart",
   "noResults": "No Results Found",
   "registered": "Registered Successfully",
-  "ok": "OK"
+  "ok": "OK",
+  "loginFailed": "Login Failed",
+  "registerFailed": "Register Failed",
+  "couldNotFindResults": "could not Find Results",
+  "passwordResetFailed": "Password Reset Failed",
+  "profileUpdateFailed": "Profile Update Failed",
+  "orderRequestFailed": "Order Request Failed"
 }

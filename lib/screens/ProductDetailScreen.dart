@@ -26,15 +26,17 @@ import 'package:flutter_app8/styles/buttonStyle.dart';
 import 'package:flutter_app8/values/myConstants.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ProductDetail extends StatefulWidget {
   final Datum? modelProducts;
+  final List<String> tags;
 
   //final div = new DivElement();
-  ProductDetail({this.modelProducts});
+  ProductDetail({this.modelProducts,required this.tags});
   @override
   _ProductDetailState createState() => _ProductDetailState();
 }
@@ -90,12 +92,15 @@ class _ProductDetailState extends State<ProductDetail> {
 
   ModelSetting? modelSettings;
 
+
+
   @override
   initState() {
     dropDownValues =
         List.generate(widget.modelProducts!.vars!.length, (value) => null);
     dropDownButtons =
         List.generate(widget.modelProducts!.vars!.length, (value) => GlobalKey());
+
 
     super.initState();
     _focusNode = new FocusNode();
@@ -162,12 +167,12 @@ class _ProductDetailState extends State<ProductDetail> {
     if (isAlwaysShown) {
       scrollBarConfig();
     }
-    return WillPopScope(
+    /*return WillPopScope(
       onWillPop: () async {
         SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
         return true;
-      },
-      child: SafeArea(
+      },*/
+      /*child:*/ return SafeArea(
         child: Scaffold(
 
           body: Stack(children: [
@@ -197,7 +202,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             child: InkWell(
                                 splashColor: Colors.white,
                                 onTap: () {
-                                  Navigator.pop(context);
+                                  Navigator.of(context).pop();
                                   SystemChrome.setEnabledSystemUIOverlays(
                                       SystemUiOverlay.values);
                                 },
@@ -242,9 +247,12 @@ class _ProductDetailState extends State<ProductDetail> {
                                             padding: const EdgeInsets.only(top: 0.0),
                                             child: new Align(
                                               alignment: Alignment.center,
-                                              child: CachedNetworkImage(
+                                              child: Hero(
+                                                tag: widget.tags[0],
+                                                child: CachedNetworkImage(
                                    placeholder:(context,s)=> Icon(Icons.camera),imageUrl: item,
 
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -299,15 +307,18 @@ class _ProductDetailState extends State<ProductDetail> {
                         children: [
                           SizedBox(
                               width: MediaQuery.of(context).size.width / 1.3,
-                              child: Align(
-                                  alignment: AlignmentDirectional.topStart,
-                                  child: FittedBox(
-                                      fit: BoxFit.contain,
-                                      child: Text(
-                                        widget.modelProducts!.name!,
-                                        style:
-                                            Theme.of(context).textTheme.headline2,
-                                      )))),
+                              child: Hero(
+                                tag: widget.tags[1],
+                                child: Align(
+                                    alignment: AlignmentDirectional.topStart,
+                                    child: FittedBox(
+                                        fit: BoxFit.contain,
+                                        child: Text(
+                                          widget.modelProducts!.name!,
+                                          style:
+                                              Theme.of(context).textTheme.headline2,
+                                        ))),
+                              )),
                           Padding(
                             padding: const EdgeInsetsDirectional.only(top: 16.0),
                             child: Align(
@@ -401,7 +412,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         elevation: 12.0,
                         splashColor: colorPrimary,
                         onPressed: () {
-                        //  Share.share( 'https://foryou.flk.sa/store/' + widget.modelProducts!.slug.toString());
+                          Share.share( 'https://foryou.flk.sa/store/' + widget.modelProducts!.name.toString());
 
                         },
                         child: Icon(
@@ -416,8 +427,8 @@ class _ProductDetailState extends State<ProductDetail> {
             ]),
           ]),
         ),
-      ),
-    );
+      );
+
   }
 
   onIconHeartClick() {
@@ -627,9 +638,9 @@ class _ProductDetailState extends State<ProductDetail> {
 
   onButtonClick() async {
     buttonTextWidget();
-    if (!await MyApplication.checkConnection()) {
+    if (!await MyApplication.checkConnection() && !isExist) {
       MyApplication.getDialogue(
-          context, S.of(context).noInternet, '', DialogType.ERROR);
+          context,S.of(context).addingFailed, S.of(context).noInternet, DialogType.ERROR);
     } else if (varsExist && !isExist) {
       bool state = await _checkInventoryForOrder();
       setState(() {
@@ -678,9 +689,9 @@ class _ProductDetailState extends State<ProductDetail> {
     if (isAlwaysShown) {
       Timer.periodic(Duration(milliseconds: 2100), (timer) {
         if (this.mounted) {
-          setState(() {
+          //setState(() {
             isAlwaysShown = false;
-          });
+          //});
         }
       });
     }

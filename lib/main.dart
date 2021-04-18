@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart' as pp;
 import 'package:flutter_app8/bottom_nav_routes/Account.dart';
 import 'package:flutter_app8/bottom_nav_routes/Categories.dart';
@@ -37,6 +38,9 @@ import 'package:provider/single_child_widget.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:uni_links2/uni_links.dart';
+
+
 import 'bottom_nav_routes/Home.dart';
 import 'generated/l10n.dart';
 import 'dart:io';
@@ -104,6 +108,15 @@ class _MyAppState extends State<MyApp> {
   Locale? locale;
   bool first = true;
   late CacheStore cacheStore;
+  String? _latestLink;
+  String? _initialLink;
+  Uri? _initialUri;
+
+  Uri? _latestUri;
+
+  StreamSubscription? _sub;
+
+
   changeLanguage(Locale locale) {
     setState(() {
       this.locale = locale;
@@ -123,10 +136,12 @@ class _MyAppState extends State<MyApp> {
       Api.cacheStore = cacheStore;
     }// cacheStore = FileCacheStore(dir.path);
     super.initState();
+    initPlatformStateForStringUniLinks();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(_latestLink.toString());
     return ChangeNotifierProvider<AppLanguage>(
         create: (_) => widget.appLanguage!,
         child: Consumer<AppLanguage>(builder: (context, model, child) {
@@ -163,7 +178,8 @@ class _MyAppState extends State<MyApp> {
 
 
                   ),
-                  initialRoute: SplashScreen.name,
+
+                  initialRoute: _latestLink == null ? SplashScreen.name : BottomNavHost.name,
 
                   locale: locale,
                   localizationsDelegates: [
@@ -221,7 +237,7 @@ class _MyAppState extends State<MyApp> {
                     ),
                   ),
                   debugShowCheckedModeBanner: false,
-                  home: SplashScreen(),
+                  home: _latestLink == null ? SplashScreen() : BottomNavHost(_latestLink!.replaceAll('https://foryou.flk.sa/store/', '')),
                 ),
               ),
           );
@@ -260,4 +276,106 @@ class _MyAppState extends State<MyApp> {
       shadeValue(color.green, factor),
       shadeValue(color.blue, factor),
       1);
+  Future<void> initPlatformStateForStringUniLinks() async {
+    // Attach a listener to the links stream
+    if (!kIsWeb)
+      _sub = linkStream.listen((String? link) {
+        if (!mounted) return;
+        setState(() {
+          _latestLink = link ?? 'Unknown';
+          _latestUri = null;
+          try {
+            if (link != null) _latestUri = Uri.parse(link);
+          } on FormatException {}
+        });
+      }, onError: (Object err) {
+        if (!mounted) return;
+        setState(() {
+          _latestLink = 'Failed to get latest link: $err.';
+          _latestUri = null;
+        });
+      });
+
+    // Attach a second listener to the stream
+    if (!kIsWeb)
+      linkStream.listen((String? link) {
+        print('got link: $link');
+      }, onError: (Object err) {
+        print('got err: $err');
+      });
+
+    // Get the latest link
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      _initialLink = await getInitialLink();
+      print('initial link: $_initialLink');
+      if (_initialLink != null) _initialUri = Uri.parse(_initialLink!);
+    } on PlatformException {
+      _initialLink = 'Failed to get initial link.';
+      _initialUri = null;
+    } on FormatException {
+      _initialLink = 'Failed to parse the initial link as Uri.';
+      _initialUri = null;
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _latestLink = _initialLink;
+      _latestUri = _initialUri;
+    });
+  }
+  /*initPlatformStateForUriUniLinks() async {
+    // Attach a listener to the Uri links stream
+    _sub = getUriLinksStream().listen((Uri uri) {
+      if (!mounted) return;
+      setState(() {
+        _latestUri = uri;
+        _latestLink = uri?.toString() ?? 'Unknown';
+      });
+    }, onError: (err) {
+      if (!mounted) return;
+      setState(() {
+        _latestUri = null;
+        _latestLink = 'Failed to get latest link: $err.';
+      });
+    });
+
+    // Attach a second listener to the stream
+    getUriLinksStream().listen((Uri uri) {
+      print('got uri: ${uri?.path} ${uri?.queryParametersAll}');
+    }, onError: (err) {
+      print('got err: $err');
+    });
+
+    // Get the latest Uri
+    Uri? initialUri;
+    String initialLink;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      initialUri = await getInitialUri();
+      print('initial uri: ${initialUri?.path}'
+          ' ${initialUri?.queryParametersAll}');
+      initialLink = initialUri.toString();
+    } on PlatformException {
+      initialUri = null;
+      initialLink = 'Failed to get initial uri.';
+    } on FormatException {
+      initialUri = null;
+      initialLink = 'Bad parse the initial link as Uri.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _latestUri = initialUri;
+      _latestLink = initialLink;
+    });
+  }*/
 }

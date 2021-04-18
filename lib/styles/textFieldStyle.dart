@@ -45,7 +45,7 @@ class _MyTextFieldState extends State<MyTextField>
   void initState() {
     super.initState();
     controller = AnimationController(
-      duration: const Duration(milliseconds: 460),
+      duration: const Duration(milliseconds: 350),
       vsync: this,
     );
 

@@ -23,30 +23,51 @@ import 'package:intl/intl.dart' as intl;
 
 class BottomNavHost extends StatefulWidget {
   static String name = 'BottomNavHost';
+  final String searchQuery = '';
+  final String searchQueryLink;
+  BottomNavHost(this.searchQueryLink);
   @override
   _BottomNavHostState createState() => _BottomNavHostState();
 }
 
 class _BottomNavHostState extends State<BottomNavHost> {
   int _selectedIndex = 0;
-
+   String search = '';
   var _textDirection;
 
   late AwesomeDialog awesomeDialog;
+
+  PageController _pageController = PageController();
   @override
   void initState() {
+
+    if(  widget.searchQueryLink != '' )
+    {
+      setState(() {
+        _selectedIndex = 1;
+         _pageController = PageController(initialPage: 1);
+         search = widget.searchQueryLink;
+      //  _pageController.jumpToPage(1);
+       // _pageController.animateToPage(1, duration: Duration(milliseconds: 0), curve: Curves.easeOut);
+      });
+    }
+
+
     super.initState();
   }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _pageController.animateToPage(index,
+          duration: Duration(milliseconds: 500), curve: Curves.easeOut);
+      search = '';
     });
   }
 
   static const List<Widget> _widgetOptions = <Widget>[
     Home(),
-    Categories(''),
+    Categories('', ''),
     Account(),
     Cart(),
   ];
@@ -65,9 +86,23 @@ class _BottomNavHostState extends State<BottomNavHost> {
         return false;
       },
       child: Scaffold(
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
+        body: PageView(
+          physics:new NeverScrollableScrollPhysics(),
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() => _selectedIndex = index);
+          },
+          children: <Widget>[
+            Home(),
+            Categories('', search),
+            Account(),
+            Cart(),
+          ],
         ),
+
+        /*Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),*/
         bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
@@ -98,26 +133,26 @@ class _BottomNavHostState extends State<BottomNavHost> {
 
   getDialogue(BuildContext context) {
     awesomeDialog = AwesomeDialog(
-          context: context,
-          animType: AnimType.SCALE,
-          dialogType: DialogType.QUESTION,
-          headerAnimationLoop: false,
-          isDense: false,
-          dismissOnTouchOutside: false,
-          btnOk: MyButton(
-              child: Text(S.of(context).yes),
-              onClicked: () {
-                Navigator.pop(context);
-                SystemNavigator.pop();
-              }),
-          // showCloseIcon: true,
+      context: context,
+      animType: AnimType.SCALE,
+      dialogType: DialogType.QUESTION,
+      headerAnimationLoop: false,
+      isDense: false,
+      dismissOnTouchOutside: false,
+      btnOk: MyButton(
+          child: Text(S.of(context).yes),
+          onClicked: () {
+            Navigator.pop(context);
+            SystemNavigator.pop();
+          }),
+      // showCloseIcon: true,
 
-          title: S.of(context).exit,
-          desc: '',
-          btnCancel: MyButton(
-            child: Text(S.of(context).no),
-            onClicked: () => Navigator.pop(context),
-          ),
-        )  ;
+      title: S.of(context).exit,
+      desc: '',
+      btnCancel: MyButton(
+        child: Text(S.of(context).no),
+        onClicked: () => Navigator.pop(context),
+      ),
+    );
   }
 }

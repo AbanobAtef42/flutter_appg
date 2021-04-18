@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_app8/bottom_nav_routes/Categories.dart';
 import 'package:flutter_app8/generated/l10n.dart';
+import 'package:flutter_app8/icons/my_flutter_app_icons.dart';
 import 'package:flutter_app8/models/ModelAds.dart';
 import 'package:flutter_app8/models/ModelCats.dart';
 import 'package:flutter_app8/models/ModelProducts.dart';
@@ -31,6 +32,7 @@ import 'package:fluttericon/linecons_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class Home extends StatefulWidget {
@@ -66,9 +68,15 @@ class _HomeState extends State<Home> {
 
   ModelSetting? modelSettings;
 
+  late List<GlobalKey<State<StatefulWidget>>> tags;
+
+
   @override
   void initState() {
     _getPriceUnit(context, 'admin.\$');
+
+    /*tags =
+        List.generate(2, (value) => GlobalKey());*/
     super.initState();
 
     initCache();
@@ -98,6 +106,7 @@ class _HomeState extends State<Home> {
     if (listPadding == null) {
       listPadding = MediaQuery.of(context).size.width / 25;
     }
+
 
     return Scaffold(
       /*appBar: AppBar(
@@ -192,7 +201,9 @@ appBar: AppBar(toolbarHeight: 0.0,),
       scrollBarConfig();
       List urls = fetchUrls(modelAds!);
       List cats = modelCats!.data!;
-      List products = modelProducts!.data!;
+      List<Datum> products = modelProducts!.data!;
+      tags =
+          List.generate(products.length*2, (value) => GlobalKey());
       final List<String> imgList = [
         'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
         'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
@@ -271,7 +282,7 @@ appBar: AppBar(toolbarHeight: 0.0,),
                                         ),
                                       ),
                                       MyButton(
-                                        onClicked:null /*(){ _launchURL('https://foryou.flk.sa/store/' + modelAds!.data![0].title!);}*/,
+                                        onClicked:(){ _launchURL('https://foryou.flk.sa/store/' + modelAds!.data![0].title!);},
                                         child: Text(
                                           modelAds!
                                               .data![0 /*imgList.indexOf(item)*/]
@@ -345,7 +356,7 @@ appBar: AppBar(toolbarHeight: 0.0,),
                           child: InkWell(
                             onTap:()=> Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) =>Categories(cats[index].slug))),
+                                MaterialPageRoute(builder: (context) =>Categories(cats[index].slug,''))),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
@@ -491,6 +502,9 @@ SizedBox(height: 30.0,),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
+                  List<String> itemTags = [];
+                  itemTags.add(products[index].slug.toString()) ;
+                   itemTags.add(products[index].name.toString()) ;
                   String name = modelProducts!.data![index].name!;
                   if (name.length > 22) {
                     name = name.substring(0, 22) + '...';
@@ -501,10 +515,20 @@ SizedBox(height: 30.0,),
                       splashColor: colorPrimary,
                       onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => ProductDetail(
-                                  modelProducts: modelProducts!.data![index],
-                                )),
+                        PageRouteBuilder<Null>(
+                            pageBuilder: (BuildContext context, Animation<double> animation,
+                                Animation<double> secondaryAnimation) {
+                              return AnimatedBuilder(
+                                  animation: animation,
+                                  builder: (BuildContext context, Widget? child) {
+                                    return Opacity(
+                                      opacity: animation.value,
+                                      child:ProductDetail(
+                                        modelProducts: modelProducts!.data![index],tags: itemTags,) ,
+                                    );
+                                  });
+                            },
+                            transitionDuration: Duration(milliseconds: 500)),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(0.0),
@@ -521,12 +545,15 @@ SizedBox(height: 30.0,),
                                     padding: const EdgeInsets.all(12.0),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(8.0),
-                                      child: CachedNetworkImage(
+                                      child: Hero(
+                                        tag: products[index].slug.toString(),
+                                        child: CachedNetworkImage(
                                      placeholder:(context,s)=> Icon(Icons.camera),imageUrl: imgList[0],
-                                        fit: BoxFit.cover,
-                                       // width: MediaQuery.of(context).size.width / 3.7,
-                                        height:
-                                            MediaQuery.of(context).size.height / 5,
+                                          fit: BoxFit.cover,
+                                         // width: MediaQuery.of(context).size.width / 3.7,
+                                          height:
+                                              MediaQuery.of(context).size.height / 5,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -553,13 +580,18 @@ SizedBox(height: 30.0,),
                                                       .size
                                                       .width /
                                                   1.8,
-                                              child: Text(
-                                                name,
-                                                style: TextStyle(
-                                                    fontSize: Theme.of(context)
-                                                        .textTheme
-                                                        .headline3!
-                                                        .fontSize),
+                                              child: Hero(
+                                                tag: products[index].name.toString(),
+                                                child: Material(
+                                                  child: Text(
+                                                    modelProducts!.data![index].name!,
+                                                    style: TextStyle(
+                                                        fontSize: Theme.of(context)
+                                                            .textTheme
+                                                            .headline3!
+                                                            .fontSize),
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                             Spacer(
@@ -718,7 +750,7 @@ SizedBox(height: 30.0,),
               child: FittedBox(
                   fit: BoxFit.contain,
                   child: Icon(
-                    CupertinoIcons.speedometer ,
+                    MyFlutterApp.slow_internet ,
                     color: colorPrimary,
                   )),
             ),
@@ -824,4 +856,6 @@ SizedBox(height: 30.0,),
       }
     }
   }
+  void _launchURL(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
 }

@@ -49,9 +49,13 @@ class _CartState extends State<Cart> {
   bool _isSearching = false;
 
   bool searchEmpty = false;
+
+  late List<GlobalKey<State<StatefulWidget>>> tags;
   @override
   void initState() {
     super.initState();
+    tags =
+        List.generate(2, (value) => GlobalKey());
     dataBox = Hive.box(dataBoxName);
 
 
@@ -210,6 +214,8 @@ scrollBarConfig();
     } else {
       count = keys!.length;
     }
+    tags =
+        List.generate(count*2, (value) => GlobalKey());
     return Padding(
       padding: EdgeInsets.all(0.0),
       child: ListView.separated(
@@ -218,12 +224,22 @@ scrollBarConfig();
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
+          List<String> itemTags = [];
+
           if (_isSearching && _searchQuery.text.isNotEmpty) {
             modelProducts = list[index];
+            if(modelProducts != null) {
+              itemTags.add(modelProducts!.slug.toString());
+              itemTags.add(modelProducts!.name.toString());
+            }
           } else {
 
             final int key = keys![index];
             modelProducts = items.get(key);
+            if(modelProducts != null) {
+              itemTags.add(modelProducts!.slug.toString());
+              itemTags.add(modelProducts!.name.toString());
+            }
           }
           String name = modelProducts!.name!;
           if (name.length > 22) {
@@ -237,11 +253,22 @@ scrollBarConfig();
               child: InkWell(
                 splashColor: colorPrimary,
                 onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProductDetail(
-                              modelProducts: modelProducts,
-                            ))),
+                  context,
+                  PageRouteBuilder<Null>(
+                      pageBuilder: (BuildContext context, Animation<double> animation,
+                          Animation<double> secondaryAnimation) {
+                        return AnimatedBuilder(
+                            animation: animation,
+                            builder: (BuildContext context, Widget? child) {
+                              return Opacity(
+                                opacity: animation.value,
+                                child:ProductDetail(
+                                  modelProducts: modelProducts,tags: itemTags,) ,
+                              );
+                            });
+                      },
+                      transitionDuration: Duration(milliseconds: 500)),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(0.0),
                   child: Container(
@@ -257,11 +284,14 @@ scrollBarConfig();
                               padding: const EdgeInsets.all(12.0),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
-                                child: CachedNetworkImage(
-                                     placeholder:(context,s)=> Icon(Icons.camera),imageUrl: imgList[0],
-                                  fit: BoxFit.cover,
-                                //  width: MediaQuery.of(context).size.width / 3.7,
-                                  height: MediaQuery.of(context).size.height / 4.5,
+                                child: Hero(
+                                  tag: modelProducts!.slug.toString(),
+                                  child: CachedNetworkImage(
+                                       placeholder:(context,s)=> Icon(Icons.camera),imageUrl: imgList[0],
+                                    fit: BoxFit.cover,
+                                  //  width: MediaQuery.of(context).size.width / 3.7,
+                                    height: MediaQuery.of(context).size.height / 4.5,
+                                  ),
                                 ),
                               ),
                             ),
@@ -282,14 +312,19 @@ scrollBarConfig();
                                     children: [
                                       Container(
                                         width:
-                                            MediaQuery.of(context).size.width / 3,
-                                        child: Text(
-                                          name,
-                                          style: TextStyle(
-                                              fontSize: Theme.of(context)
-                                                  .textTheme
-                                                  .headline3!
-                                                  .fontSize),
+                                            MediaQuery.of(context).size.width / 1.8,
+                                        child: Hero(
+                                          tag: modelProducts!.name.toString(),
+                                          child: Material(
+                                            child: Text(
+                                              modelProducts!.name!,
+                                              style: TextStyle(
+                                                  fontSize: Theme.of(context)
+                                                      .textTheme
+                                                      .headline3!
+                                                      .fontSize),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                       Spacer(

@@ -137,7 +137,7 @@ class _PassWordResetState extends State<PassWordReset> {
           backgroundColor: colorPrimary,
           textColor: Colors.white,
           gravity: ToastGravity.BOTTOM);*/
-      MyApplication.getDialogue(context, S.of(context).noInternet, '', DialogType.ERROR);
+      MyApplication.getDialogue(context,S.of(context).passwordResetFailed, S.of(context).noInternet, DialogType.ERROR);
     }
   }
 
@@ -156,7 +156,7 @@ class _PassWordResetState extends State<PassWordReset> {
           backgroundColor: colorPrimary,
           textColor: Colors.white,
           gravity: ToastGravity.BOTTOM);*/
-      MyApplication.getDialogue(context, S.of(context).diffPasses, '', DialogType.ERROR);
+      MyApplication.getDialogue(context, S.of(context).passwordResetFailed,S.of(context).diffPasses, DialogType.ERROR);
       return;
     }
     if (form!.validate()) {

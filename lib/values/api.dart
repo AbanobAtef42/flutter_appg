@@ -91,6 +91,7 @@ class Api {
     receiveTimeout: 20000,
     headers: {"Content-Type": "application/json",
       "Access-Control-Allow-Credentials": true,
+      "Authorization":'957|QG8tc6UnNEb71uaZmVFGwo5HCkwhdmwRqCqhP2nV', // sharedPrefs.tokenKey.replaceAll('Bearer','').trim().toString(),
 
       "Access-Control-Allow-Origin":"*",
   'Charset': 'utf-8',// Required for CORS support to work
@@ -107,10 +108,12 @@ class Api {
     headers: {"Content-Type": "application/json",
       "Access-Control-Allow-Credentials": true,
       "Access-Control-Allow-Origin":"*",
-  'Charset': 'utf-8',// Required for CORS support to work
+      "Authorization":'957|QG8tc6UnNEb71uaZmVFGwo5HCkwhdmwRqCqhP2nV', // sharedPrefs.tokenKey.replaceAll('Bearer','').trim().toString(),
+
+      'Charset': 'utf-8',// Required for CORS support to work
       // Required for cookies, authorization headers with HTTPS
       "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
-      "Access-Control-Allow-Methods": "POST, OPTIONS"
+      "Access-Control-Allow-Methods": "POST,OPTIONS"
     },
   );
  static late Dio dio ;
@@ -244,7 +247,7 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).wrongEmailOrPass, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).loginFailed ,S.of(context).wrongEmailOrPass, DialogType.ERROR);
         }
         if (e.error
             .toString()
@@ -255,7 +258,8 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).slowInternet, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).loginFailed ,S.of(context).slowInternet, DialogType.ERROR);
+          return null;
         }
         if (e.error
             .toString()
@@ -268,7 +272,8 @@ if(jsonResponse == null)
                 backgroundColor: colorPrimary,
                 textColor: Colors.white,
                 gravity: ToastGravity.BOTTOM);*/
-            MyApplication.getDialogue(context, S.of(context).slowInternet, '', DialogType.ERROR);
+            MyApplication.getDialogue(context, S.of(context).loginFailed ,S.of(context).slowInternet, DialogType.ERROR);
+            return null;
           }
         }
         if (DioErrorType.receiveTimeout == e.type ||
@@ -280,7 +285,8 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).timeOut, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).loginFailed ,S.of(context).slowInternet, DialogType.ERROR);
+          return null;
         }
         // return json.decode(e.response.toString());
       }
@@ -347,7 +353,7 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).dubEmail, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).registerFailed ,S.of(context).dubEmail, DialogType.ERROR);
         }
         if (e.response.toString().contains('must be at least 7 characters')) {
           /*Fluttertoast.showToast(
@@ -356,7 +362,7 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).shortPass, '', DialogType.ERROR);
+          MyApplication.getDialogue(context,S.of(context).registerFailed ,S.of(context).shortPass,  DialogType.ERROR);
         }
 
         if (e.response
@@ -368,7 +374,7 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).dubPhone, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).registerFailed,S.of(context).dubPhone,  DialogType.ERROR);
         }
         if (e.response
             .toString()
@@ -379,7 +385,7 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).diffPasses, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).registerFailed ,S.of(context).diffPasses,  DialogType.ERROR);
         }
         // return json.decode(e.response.toString());
 
@@ -392,7 +398,8 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).slowInternet, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).registerFailed,S.of(context).slowInternet,  DialogType.ERROR);
+          return null;
         }
         if (e.error
             .toString()
@@ -405,7 +412,8 @@ if(jsonResponse == null)
                 backgroundColor: colorPrimary,
                 textColor: Colors.white,
                 gravity: ToastGravity.BOTTOM);*/
-            MyApplication.getDialogue(context, S.of(context).slowInternet, '', DialogType.ERROR);
+            MyApplication.getDialogue(context, S.of(context).registerFailed,S.of(context).slowInternet,  DialogType.ERROR);
+            return null;
           }
         }
         if (DioErrorType.receiveTimeout == e.type ||
@@ -417,7 +425,8 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).timeOut, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).registerFailed,S.of(context).slowInternet,  DialogType.ERROR);
+          return null;
         }
       }
     }
@@ -489,19 +498,24 @@ if(jsonResponse == null)
 
   Future<Map<String, dynamic>?> _getCats(String url, String token) async {
     try {
-      print(token);
+      print(url + 'url cats');
      // DioCacheManager _dioCacheManager = DioCacheManager(CacheConfig());
 
       Dio dio = Dio(options);
 
-     dio.interceptors.add(DioCacheInterceptor(options:CacheOptions(store: cacheStore,policy: CachePolicy.forceCache)));
-    
+   //  dio.interceptors.add(DioCacheInterceptor(options:CacheOptions(store: cacheStore,policy: CachePolicy.forceCache)));
+
       Options requestOptions = Options(
-        headers: {"Content-Type": "application/json", "Authorization": token},
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization":token, // sharedPrefs.tokenKey.replaceAll('Bearer','').trim().toString(),
+          'Charset': 'utf-8'
+        },
       );
+      print('token cats  '+sharedPrefs.tokenKey.replaceAll('Bearer' ,'').trim().toString());
       Response response = await dio.get(url, options: /*buildCacheOptions(
           Duration(days: 7), options:*/ requestOptions);
-      print('responseAds');
+      print('responsecats');
       print(response);
       return json.decode(response.toString())[0];
     } on Exception catch(e)
@@ -576,18 +590,22 @@ if(jsonResponse == null)
 
           if(! await MyApplication.checkConnection())
           {
-            MyApplication.getDialogue(context, S.of(context).noInternet, '', DialogType.ERROR);
+            MyApplication.getDialogue(context,S.of(context).couldNotFindResults, S.of(context).noInternet, DialogType.ERROR);
           }
          ModelProducts? modelProducts  =  new ModelProducts();
           return modelProducts;
 
         }
-    else if( jsonResponse!['message'].toString().contains('غير موجود')) {
+     else if(jsonResponse == null)
+     {
+      // return;
+     }
+    else if( jsonResponse['message'].toString().contains('غير موجود')) {
        ModelProducts modelProducts = ModelProducts();
        modelProducts.data = [];
       return modelProducts;
     }
-      return  ModelProducts.fromJson(jsonResponse);
+      return  ModelProducts.fromJson(jsonResponse!);
 
     } on Exception catch(e)
     {
@@ -765,7 +783,8 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).slowInternet, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).passwordResetFailed ,S.of(context).slowInternet,  DialogType.ERROR);
+          return null;
         }
         if (e.error
             .toString()
@@ -778,8 +797,10 @@ if(jsonResponse == null)
                 backgroundColor: colorPrimary,
                 textColor: Colors.white,
                 gravity: ToastGravity.BOTTOM);*/
-            MyApplication.getDialogue(context, S.of(context).slowInternet, '', DialogType.ERROR);
+            MyApplication.getDialogue(context, S.of(context).passwordResetFailed ,S.of(context).slowInternet,  DialogType.ERROR);
+            return null;
           }
+
         }
         if (DioErrorType.receiveTimeout == e.type ||
             DioErrorType.connectTimeout == e.type ||
@@ -790,7 +811,8 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).slowInternet, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).passwordResetFailed ,S.of(context).slowInternet,  DialogType.ERROR);
+          return null;
         }
         // return json.decode(e.response.toString());
       }
@@ -877,7 +899,7 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).dubEmail, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).profileUpdateFailed ,S.of(context).dubEmail,  DialogType.ERROR);
         }
         if (e.response.toString().contains('must be at least 7 characters')) {
           /*Fluttertoast.showToast(
@@ -886,7 +908,7 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).shortPass, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).profileUpdateFailed,S.of(context).shortPass, DialogType.ERROR);
         }
 
         if (e.response
@@ -898,7 +920,7 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).dubPhone, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).profileUpdateFailed,S.of(context).dubPhone,  DialogType.ERROR);
         }
         if (e.response
             .toString()
@@ -909,7 +931,7 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).diffPasses, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).profileUpdateFailed,S.of(context).diffPasses, DialogType.ERROR);
         }
         // return json.decode(e.response.toString());
 
@@ -922,7 +944,8 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).slowInternet, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).profileUpdateFailed,S.of(context).slowInternet, DialogType.ERROR);
+          return null;
         }
         if (e.error
             .toString()
@@ -935,7 +958,8 @@ if(jsonResponse == null)
                 backgroundColor: colorPrimary,
                 textColor: Colors.white,
                 gravity: ToastGravity.BOTTOM);*/
-            MyApplication.getDialogue(context, S.of(context).slowInternet, '', DialogType.ERROR);
+            MyApplication.getDialogue(context, S.of(context).profileUpdateFailed,S.of(context).slowInternet, DialogType.ERROR);
+            return null;
           }
         }
         if (DioErrorType.receiveTimeout == e.type ||
@@ -947,7 +971,8 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).timeOut, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).profileUpdateFailed,S.of(context).slowInternet, DialogType.ERROR);
+          return null;
         }
       }
     }
@@ -1233,7 +1258,7 @@ if(jsonResponse == null)
      else if(jsonResponse['success'].toString() == 'false')
       {
         print('succcccccc+falseeeeeeee');
-        MyApplication.getDialogue2(context, S.of(context).orderFailed,S.of(context).productNAvail, DialogType.ERROR);
+        MyApplication.getDialogue2(context, S.of(context).orderRequestFailed,S.of(context).productNAvail, DialogType.ERROR);
         return 'f';
      // }
 
@@ -1302,7 +1327,8 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).slowInternet, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).orderRequestFailed,S.of(context).slowInternet, DialogType.ERROR);
+          return null;
         }
         if (e.error
             .toString()
@@ -1315,7 +1341,8 @@ if(jsonResponse == null)
                 backgroundColor: colorPrimary,
                 textColor: Colors.white,
                 gravity: ToastGravity.BOTTOM);*/
-            MyApplication.getDialogue(context, S.of(context).slowInternet, '', DialogType.ERROR);
+            MyApplication.getDialogue(context, S.of(context).orderRequestFailed,S.of(context).slowInternet, DialogType.ERROR);
+            return null;
           }
         }
         if (DioErrorType.receiveTimeout == e.type ||
@@ -1327,7 +1354,8 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).timeOut, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).orderRequestFailed,S.of(context).slowInternet, DialogType.ERROR);
+          return null;
         }
         // return json.decode(e.response.toString());
       }
@@ -1365,7 +1393,7 @@ if(jsonResponse == null)
         return 'f';
     } else if (jsonResponse['success'].toString() == 'true' && jsonResponse['check'].toString() == 'true') {
       print('successssssssss');
-     // MyApplication.getDialogue(context, S.of(context).addedSuccessfully , S.of(context).productAddTCart, DialogType.SUCCES);
+      MyApplication.getDialogue(context, S.of(context).addedSuccessfully , S.of(context).productAddTCart, DialogType.SUCCES);
       return 's';
     }
 
@@ -1394,15 +1422,7 @@ if(jsonResponse == null)
       print('execptionnnnnn' + e.toString());
 
       if (e is DioError) {
-        if (e.response.toString().contains('Unauthorized')) {
-          /*Fluttertoast.showToast(
-              msg: S.of(context).wrongEmailOrPass,
-              toastLength: Toast.LENGTH_SHORT,
-              backgroundColor: colorPrimary,
-              textColor: Colors.white,
-              gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).wrongEmailOrPass, '', DialogType.ERROR);
-        }
+
         if (e.error
             .toString()
             .contains('No address associated with hostname')) {
@@ -1412,8 +1432,8 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).slowInternet, '', DialogType.ERROR);
-
+          MyApplication.getDialogue(context, S.of(context).addingFailed,S.of(context).slowInternet, DialogType.ERROR);
+          return null;
         }
         if (e.error
             .toString()
@@ -1426,7 +1446,8 @@ if(jsonResponse == null)
                 backgroundColor: colorPrimary,
                 textColor: Colors.white,
                 gravity: ToastGravity.BOTTOM);*/
-            MyApplication.getDialogue(context, S.of(context).slowInternet, '', DialogType.ERROR);
+            MyApplication.getDialogue(context, S.of(context).addingFailed,S.of(context).slowInternet,  DialogType.ERROR);
+            return null;
           }
         }
         if (DioErrorType.receiveTimeout == e.type ||
@@ -1438,7 +1459,8 @@ if(jsonResponse == null)
               backgroundColor: colorPrimary,
               textColor: Colors.white,
               gravity: ToastGravity.BOTTOM);*/
-          MyApplication.getDialogue(context, S.of(context).timeOut, '', DialogType.ERROR);
+          MyApplication.getDialogue(context, S.of(context).addingFailed,S.of(context).slowInternet,  DialogType.ERROR);
+          return null;
         }
         // return json.decode(e.response.toString());
       }
@@ -1469,6 +1491,7 @@ if(jsonResponse == null)
     }
     if(jsonResponse == null)
     {
+      print('nulllllprice');
       ModelSetting? modelSetting;
       return modelSetting;
     }

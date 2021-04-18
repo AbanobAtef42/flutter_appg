@@ -113,6 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             width: MediaQuery.of(context).size.height /
                                 registerTopViewHeight,
                             child: CircularProgressIndicator(
+color: Colors.white,
 
                             ),
                           ),
@@ -331,8 +332,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           backgroundColor: colorPrimary,
           textColor: Colors.white,
           gravity: ToastGravity.BOTTOM);*/
-      MyApplication.getDialogue(
-          context, S.of(context).noInternet, '', DialogType.ERROR);
+      MyApplication.getDialogue(context,S.of(context).registerFailed, S.of(context).noInternet, DialogType.ERROR);
     }
   }
 

@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app8/generated/l10n.dart';
+import 'package:flutter_app8/icons/my_flutter_app_icons.dart';
 import 'package:flutter_app8/models/modelUser.dart';
 import 'package:flutter_app8/providers/providerUser.dart';
 import 'package:flutter_app8/styles/buttonStyle.dart';
@@ -373,7 +374,7 @@ if(statusBarHeight == null)
               child: FittedBox(
                   fit: BoxFit.contain,
                   child: Icon(
-                    Icons.wifi_off_rounded,
+                    MyFlutterApp.slow_internet,
                     color: colorPrimary,
                   )),
             ),

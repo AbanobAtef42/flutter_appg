@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app8/generated/l10n.dart';
+import 'package:flutter_app8/icons/my_flutter_app_icons.dart';
 import 'package:flutter_app8/models/ModelOrders.dart';
 import 'package:flutter_app8/models/ModelSetting.dart';
 import 'package:flutter_app8/providers/providerHome.dart';
@@ -13,8 +14,16 @@ import 'package:flutter_app8/values/SharedPreferenceClass.dart';
 import 'package:flutter_app8/values/api.dart';
 import 'package:flutter_app8/values/myApplication.dart';
 import 'package:flutter_app8/values/myConstants.dart';
+import 'package:fluttericon/brandico_icons.dart';
+import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:fluttericon/iconic_icons.dart';
+import 'package:fluttericon/mfg_labs_icons.dart';
 import 'package:fluttericon/octicons_icons.dart';
+import 'package:fluttericon/typicons_icons.dart';
+import 'package:fluttericon/zocial_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:provider/provider.dart';
@@ -126,7 +135,7 @@ late ProviderHome provider;
               child: FittedBox(
                   fit: BoxFit.contain,
                   child: Icon(
-                    CupertinoIcons.speedometer,
+                    MyFlutterApp.slow_internet,
                     color: colorPrimary,
                   )),
             ),
@@ -155,6 +164,7 @@ late ProviderHome provider;
           ),
           ]),
         );
+
     } else {
 
       List orders = modelOrders!.data!;
@@ -166,6 +176,32 @@ late ProviderHome provider;
         // 'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
         // 'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
       ];
+      if (modelOrders!.data != null && modelOrders!.data!.length == 0) {
+        //hideScrollBar();
+        return Container(
+          height: MediaQuery.of(context).size.height / 1.5,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width / 2,
+                height: MediaQuery.of(context).size.height / 3,
+                child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Icon(
+                      FontAwesome.dropbox,
+                      color: colorPrimary,
+                    )),
+              ),
+              Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: FittedBox(
+                      fit: BoxFit.contain, child: Text('You Don\'t Have Orders Yet'))),
+            ],
+          ),
+        );
+      }
       return Padding(
         padding: EdgeInsets.only(top: 0.0,bottom: 0.0,right: 0.0,left: 0.0),
         child: Container(

@@ -23,7 +23,7 @@ class Validations {
   static String? validateField(String value,BuildContext context) {
     String? validateString = '';
 
-    if (value.isEmpty) {
+    if (value.trim().isEmpty) {
       validateString = S.of(context).emptyField;
     }  else {
         validateString = null;

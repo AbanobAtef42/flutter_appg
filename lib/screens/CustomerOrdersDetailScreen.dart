@@ -6,6 +6,7 @@ import 'package:flutter_app8/clippers/OctagonClipper.dart';
 import 'package:flutter_app8/generated/l10n.dart';
 import 'package:flutter_app8/models/ModelOrders.dart';
 import 'package:flutter_app8/styles/styles.dart';
+import 'package:flutter_app8/values/SharedPreferenceClass.dart';
 import 'package:flutter_app8/values/myConstants.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
@@ -142,7 +143,7 @@ class _CustomerOrdersDetailState extends State<CustomerOrdersDetail> {
     orderDataRowWidget(FontAwesome5.box_open/*FlutterIcons.box_open_faw5s*/, S.of(context).item, widget.modelOrders.items![0].productId!.name!),
 
     Divider(),
-    orderDataRowWidget(Linecons.money/*FlutterIcons.attach_money_mdi*/, S.of(context).amount, widget.modelOrders.total.toString() + ' EGP'),
+    orderDataRowWidget(Linecons.money/*FlutterIcons.attach_money_mdi*/, S.of(context).amount, widget.modelOrders.total.toString() + ' '+ sharedPrefs.priceUnitKey),
 
 
 

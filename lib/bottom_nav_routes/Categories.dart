@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app8/generated/l10n.dart';
+import 'package:flutter_app8/icons/my_flutter_app_icons.dart';
 import 'package:flutter_app8/models/ModelCats.dart';
 import 'package:flutter_app8/models/ModelProducts.dart';
 import 'package:flutter_app8/models/ModelSetting.dart';
@@ -29,8 +30,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class Categories extends StatefulWidget {
-  final String? catQuery;
-  const Categories(this.catQuery);
+  final String catQuery;
+  final String searchQuery;
+
+  static String name = 'category';
+  const Categories(this.catQuery,this.searchQuery);
 
   //static bool listen = true;
 
@@ -43,7 +47,7 @@ class _CategoriesState extends State<Categories> {
   ModelProducts? modelProducts;
   ModelProducts? modelProducts2;
   double? listPadding;
-  String? catQuery = '';
+  String catQuery = '';
   String trendQuery = '';
   String searchQuery = '';
   double? statusBarHeight;
@@ -64,18 +68,24 @@ class _CategoriesState extends State<Categories> {
   var x = 0;
 
   var _appBarTitle;
-  ScrollController? _scrollController;
+ // ScrollController? _scrollController;
 
   bool? isAlwaysShown;
 
   bool internetp = true;
 
   ModelSetting? modelSettings;
+
+  late List<GlobalKey<State<StatefulWidget>>> tags;
+
+
   @override
   void initState() {
-    _scrollController = ScrollController();
+  //  _scrollController = ScrollController();
+
     isAlwaysShown = true;
     catQuery = widget.catQuery;
+    searchQuery = widget.searchQuery;
     _getCats(context);
     _getPriceUnit(context, 'admin.\$');
     _getProducts(context, -1);
@@ -406,7 +416,7 @@ class _CategoriesState extends State<Categories> {
     setState(() {
       index1 = index;
       searchQuery = '';
-      catQuery = modelCats!.data![index].slug;
+      catQuery = modelCats!.data![index].slug!;
       trendQuery = '';
       loading = true;
      // this.modelCats = provider.modelCats;
@@ -474,7 +484,7 @@ class _CategoriesState extends State<Categories> {
               child: FittedBox(
                   fit: BoxFit.contain,
                   child: Icon(
-                    CupertinoIcons.speedometer,
+                    MyFlutterApp.slow_internet,
                     color: colorPrimary,
                   )),
             ),
@@ -531,7 +541,9 @@ class _CategoriesState extends State<Categories> {
 
     if (modelProducts.data != null && modelProducts.data!.length > 0) {
       // modelProducts.data.clear();
-      List products = modelProducts.data!;
+      List<Datum> products = modelProducts.data!;
+      tags =
+          List.generate(products.length*2, (value) => GlobalKey());
 
       final List<String> imgList = [
         'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -625,6 +637,9 @@ class _CategoriesState extends State<Categories> {
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
+              List<String> itemTags = [];
+              itemTags.add(products[index].slug.toString()) ;
+              itemTags.add(products[index].name.toString()) ;
               String name = modelProducts.data![index].name!;
               if (name.length > 22) {
                 name = name.substring(0, 22) + '...';
@@ -634,11 +649,31 @@ class _CategoriesState extends State<Categories> {
                 child: InkWell(
                   splashColor: colorPrimary,
                   onTap: () => Navigator.push(
-                      context,
+                    context,
+                    PageRouteBuilder<Null>(
+                        pageBuilder: (BuildContext context, Animation<double> animation,
+                            Animation<double> secondaryAnimation) {
+                          return AnimatedBuilder(
+                              animation: animation,
+                              builder: (BuildContext context, Widget? child) {
+                                return Opacity(
+                                  opacity: animation.value,
+                                  child:ProductDetail(
+                                    modelProducts: modelProducts.data![index],tags: itemTags,) ,
+                                );
+                              });
+                        },
+                        transitionDuration: Duration(milliseconds: 500)),
+                  ),
+
+                      /*context,
                       MaterialPageRoute(
                           builder: (context) => ProductDetail(
                                 modelProducts: modelProducts.data![index],
-                              ))),
+                              )
+                      )
+                  ),*/
+
                   child: Padding(
                     padding: const EdgeInsets.all(0.0),
                     child: Container(
@@ -654,15 +689,19 @@ class _CategoriesState extends State<Categories> {
                                 padding: const EdgeInsets.all(12.0),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8.0),
-                                  child: CachedNetworkImage(
-                                     placeholder:(context,s)=> Icon(Icons.camera),
-                                    imageUrl: imgList[0],
+                                  child: Hero(
+                                    tag: products[index].slug.toString(),
+                                    child: CachedNetworkImage(
 
-                                    fit: BoxFit.cover,
-                                    width:
-                                        MediaQuery.of(context).size.width / 3.7,
-                                    height:
-                                        MediaQuery.of(context).size.height / 5,
+                                       placeholder:(context,s)=> Icon(Icons.camera),
+                                      imageUrl: imgList[0],
+
+                                      fit: BoxFit.cover,
+                                      width:
+                                          MediaQuery.of(context).size.width / 3.7,
+                                      height:
+                                          MediaQuery.of(context).size.height / 5,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -688,14 +727,19 @@ class _CategoriesState extends State<Categories> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width /
-                                              3,
-                                          child: Text(
-                                            modelProducts.data![index].name!,
-                                            style: TextStyle(
-                                                fontSize: Theme.of(context)
-                                                    .textTheme
-                                                    .headline3!
-                                                    .fontSize),
+                                              1.8,
+                                          child: Hero(
+                                            tag: products[index].name.toString(),
+                                            child: Material(
+                                              child: Text(
+                                                modelProducts.data![index].name!,
+                                                style: TextStyle(
+                                                    fontSize: Theme.of(context)
+                                                        .textTheme
+                                                        .headline3!
+                                                        .fontSize),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                         Spacer(
@@ -748,7 +792,8 @@ class _CategoriesState extends State<Categories> {
                     ),
                   ),
                 ),
-              );
+                );
+
             },
             separatorBuilder: (context, index) => new Divider(),
           ),
@@ -1080,7 +1125,7 @@ class _CategoriesState extends State<Categories> {
               child: FittedBox(
                   fit: BoxFit.contain,
                   child: Icon(
-                    CupertinoIcons.speedometer,
+                    MyFlutterApp.slow_internet,
                     color: colorPrimary,
                   )),
             ),
@@ -1138,7 +1183,7 @@ class _CategoriesState extends State<Categories> {
         //   modelSettings = Provider.of<ProviderUser>(context, listen: false).modelSettings;
 
       });
-    } else {
+    } else  {
       print('exeinternetprice');
       if(sharedPrefs.priceUnitKey == '') {
         await Provider.of<ProviderUser>(context, listen: false)
@@ -1151,8 +1196,12 @@ class _CategoriesState extends State<Categories> {
             modelSettings = Provider
                 .of<ProviderUser>(context, listen: false)
                 .modelSettings;
-            SharedPrefs().priceUnit(modelSettings!.data![0].value.toString());
-            SharedPrefs().exertedPriceUnit(modelSettings!.data![0].value.toString());
+            if(modelSettings != null) {
+              SharedPrefs().priceUnit(modelSettings!
+                  .data![0].value.toString());
+              SharedPrefs().exertedPriceUnit(
+                  modelSettings!.data![0].value.toString());
+            }
             // print(modelSettings!.data.toString()+'--------');
           });
 

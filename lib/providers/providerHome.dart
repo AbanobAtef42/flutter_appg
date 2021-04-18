@@ -59,7 +59,7 @@ String? sentOrder;
   }
 
   getProductsCats(
-      String? catQuery, String searchQuery, String trendQuery) async {
+      String catQuery, String searchQuery, String trendQuery) async {
 
     final Api api = Api();
     loadingCats = true;

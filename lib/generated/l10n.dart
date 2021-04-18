@@ -107,40 +107,40 @@ class S {
     );
   }
 
-  /// `Register Failed\nThe email has already been taken`
+  /// `The email has already been taken`
   String get dubEmail {
     return Intl.message(
-      'Register Failed\nThe email has already been taken',
+      'The email has already been taken',
       name: 'dubEmail',
       desc: '',
       args: [],
     );
   }
 
-  /// `Register Failed\nPassword must be at least 7 characters`
+  /// `Password must be at least 7 characters`
   String get shortPass {
     return Intl.message(
-      'Register Failed\nPassword must be at least 7 characters',
+      'Password must be at least 7 characters',
       name: 'shortPass',
       desc: '',
       args: [],
     );
   }
 
-  /// `Register Failed\nThe phone has already been taken`
+  /// `The phone has already been taken`
   String get dubPhone {
     return Intl.message(
-      'Register Failed\nThe phone has already been taken',
+      'The phone has already been taken',
       name: 'dubPhone',
       desc: '',
       args: [],
     );
   }
 
-  /// `Register Failed\nThe password confirmation does not match`
+  /// `The password confirmation does not match`
   String get diffPasses {
     return Intl.message(
-      'Register Failed\nThe password confirmation does not match',
+      'The password confirmation does not match',
       name: 'diffPasses',
       desc: '',
       args: [],
@@ -822,6 +822,66 @@ class S {
     return Intl.message(
       'OK',
       name: 'ok',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login Failed`
+  String get loginFailed {
+    return Intl.message(
+      'Login Failed',
+      name: 'loginFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register Failed`
+  String get registerFailed {
+    return Intl.message(
+      'Register Failed',
+      name: 'registerFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `could not Find Results`
+  String get couldNotFindResults {
+    return Intl.message(
+      'could not Find Results',
+      name: 'couldNotFindResults',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password Reset Failed`
+  String get passwordResetFailed {
+    return Intl.message(
+      'Password Reset Failed',
+      name: 'passwordResetFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profile Update Failed`
+  String get profileUpdateFailed {
+    return Intl.message(
+      'Profile Update Failed',
+      name: 'profileUpdateFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Order Request Failed`
+  String get orderRequestFailed {
+    return Intl.message(
+      'Order Request Failed',
+      name: 'orderRequestFailed',
       desc: '',
       args: [],
     );
